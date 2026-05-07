@@ -10,9 +10,6 @@
           <router-view />
         </a-layout-content>
       </a-layout>
-      <a-layout-footer class="footer">
-        <a href="http://ek-flowity.site" target="_blank"> © 2025 Site Operated by Eric Wang</a>
-      </a-layout-footer>
     </a-layout>
   </div>
 </template>
@@ -20,41 +17,40 @@
 <script setup lang="ts">
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import GlobalSider from '@/components/GlobalSider.vue'
-// import GlobalSider from "@/components/GlobalSider.vue";
 </script>
 
 <style scoped>
+#basicLayout {
+  background: var(--bg-color);
+  min-height: 100vh;
+}
+
 #basicLayout .header {
-  padding-inline: 20px;
-  background: white;
-  color: unset;
-  margin-bottom: 1px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding-inline: 24px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-color);
+  height: 64px;
+  line-height: 64px;
 }
 
 #basicLayout .sider {
-  background: #fff;
-  border-right: 0.5px solid #eee;
-  padding-top: 20px;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--border-color);
+  padding-top: 8px;
 }
 
 #basicLayout :deep(.ant-menu-root) {
   border-bottom: none !important;
   border-inline-end: none !important;
+  background: transparent;
 }
 
 #basicLayout .content {
-  padding: 28px;
-  background: linear-gradient(to right, #fefefe, #fff);
-  margin-bottom: 28px;
-}
-
-#basicLayout .footer {
-  background: #efefef;
-  padding: 16px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
+  padding: 24px;
+  background: var(--bg-color);
 }
 </style>

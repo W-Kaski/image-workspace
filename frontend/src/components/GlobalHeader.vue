@@ -1,50 +1,66 @@
 <template>
   <div id="globalHeader">
-    <a-row :wrap="false">
-      <a-col flex="200px">
+    <a-row :wrap="false" align="middle">
+      <!-- Logo Area -->
+      <a-col flex="240px">
         <router-link to="/">
-          <div class="title-bar">
-            <img class="logo" src="../assets/logo.png" alt="logo" />
-            <div class="title">Image Workspace</div>
+          <div class="logo-area">
+            <img class="logo" src="../assets/logo.svg" alt="logo" />
+            <span class="brand-text">image-workspace</span>
           </div>
         </router-link>
       </a-col>
 
+      <!-- Global Search Bar -->
       <a-col flex="auto">
-        <a-menu
-          v-model:selectedKeys="current"
-          mode="horizontal"
-          :items="items"
-          @click="doMenuClick"
-        />
+        <div class="header-search">
+          <a-input-search
+            v-model:value="searchText"
+            placeholder="Search inspiration..."
+            @search="onSearch"
+            style="max-width: 480px"
+          />
+        </div>
       </a-col>
 
-      <a-col flex="120px">
-        <div class="user-login-status">
-          <div v-if="loginUserStore.loginUser.id">
-            <a-dropdown>
-              <a-space>
-                <a-avatar :src="loginUserStore.loginUser.userAvatar" />
-                {{ loginUserStore.loginUser.userName ?? 'user_unnamed' }}
-              </a-space>
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item>
-                    <router-link to="/my_space">
-                      <UserOutlined />
-                      My Space
-                    </router-link>
-                  </a-menu-item>
-                  <a-menu-item @click="doLogout">
-                    <LogoutOutlined />
-                    Logout
-                  </a-menu-item>
-                </a-menu>
-              </template>
-            </a-dropdown>
-          </div>
-          <div v-else>
-            <a-button type="primary" href="/user/login">登录</a-button>
+      <!-- Nav & User Area -->
+      <a-col flex="300px">
+        <div class="right-nav">
+          <a-menu
+            v-model:selectedKeys="current"
+            mode="horizontal"
+            :items="items"
+            @click="doMenuClick"
+            class="header-menu"
+          />
+
+          <div class="user-area">
+            <div v-if="loginUserStore.loginUser.id">
+              <a-dropdown placement="bottomRight">
+                <a-avatar
+                  :src="loginUserStore.loginUser.userAvatar"
+                  class="user-avatar"
+                />
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item key="space">
+                      <router-link to="/my_space">
+                        <UserOutlined />
+                        <span style="margin-left: 8px">My Space</span>
+                      </router-link>
+                    </a-menu-item>
+                    <a-menu-divider />
+                    <a-menu-item key="logout" @click="doLogout" danger>
+                      <LogoutOutlined />
+                      <span style="margin-left: 8px">Logout</span>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
+            </div>
+            <div v-else>
+              <a-button type="primary" shape="round" href="/user/login">Login</a-button>
+            </div>
           </div>
         </div>
       </a-col>
@@ -53,59 +69,57 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, h, ref } from 'vue'
-import { HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { computed, h, ref, watch } from 'vue'
+import { HomeOutlined, LogoutOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { userLogoutUsingPost } from '@/api/userController.ts'
-import AddPicturePage from '@/pages/picture/AddPicturePage.vue'
 
 const loginUserStore = useLoginUserStore()
+const router = useRouter()
+const route = useRoute()
 
+// Search Logic
+const searchText = ref('')
+const onSearch = () => {
+  router.push({
+    path: '/',
+    query: {
+      ...route.query,
+      searchText: searchText.value,
+    }
+  })
+}
+
+// Sync search text with URL
+watch(() => route.query.searchText, (newVal) => {
+  searchText.value = (newVal as string) || ''
+}, { immediate: true })
 
 const originItems = [
   {
     key: '/',
-    icon: () => h(HomeOutlined),
     label: 'Home',
     title: 'Home',
   },
   {
-    key: '/admin/userManage',
-    label: 'UserManage',
-    title: 'UserManage',
+    key: '/add_picture',
+    label: 'Post',
+    title: 'Post Image',
   },
   {
     key: '/admin/pictureManage',
-    label: 'PictureManage',
-    title: 'PictureManage',
-  },
-  {
-    key: '/admin/spaceManage',
-    label: 'SpaceManage',
-    title: 'SpaceManage',
-  },
-  {
-    key: '/add_picture',
-    label: 'AddPicture',
-    title: 'AddPicture',
-  },
-  {
-    key: 'others',
-    label: h('a', { href: 'https://www.ek-flowity.site', target: '_blank' }, 'Author'),
-    title: 'Author Site',
-  },
+    label: 'Admin',
+    title: 'Admin',
+  }
 ]
-// filter menus
+
 const filterMenus = (menus = [] as any[]) => {
   return menus?.filter((menu) => {
-    // on admin menu, check user role
     if (menu?.key?.startsWith('/admin')) {
       const loginUser = loginUserStore.loginUser
-      if (!loginUser || loginUser.userRole !== 'admin') {
-        return false
-      }
+      return loginUser && loginUser.userRole === 'admin'
     }
     return true
   })
@@ -113,55 +127,101 @@ const filterMenus = (menus = [] as any[]) => {
 
 const items = computed(() => filterMenus(originItems))
 
-
-const router = useRouter()
-
-// 路由跳转事件
 const doMenuClick = ({ key }: { key: string }) => {
-  router.push({
-    path: key,
-  })
+  if (key === 'others') return
+  router.push({ path: key })
 }
-// 当前要高亮的菜单项
+
 const current = ref<string[]>([])
-// 监听路由变化，更新高亮菜单项
-router.afterEach((to, from, next) => {
+router.afterEach((to) => {
   current.value = [to.path]
 })
-
-
 
 const doLogout = async () => {
   const res = await userLogoutUsingPost()
   if (res.data.code === 0) {
-    loginUserStore.setLoginUser({
-      userName: 'not logged in',
-    })
-    message.success('logged out')
-    await router.push('/user/login')
+    loginUserStore.setLoginUser({ userName: 'not logged in' })
+    message.success('Logged out')
+    router.push('/user/login')
   } else {
-    message.error('fail to logout，' + res.data.message)
+    message.error('Logout failed: ' + res.data.message)
   }
 }
-
-
-
-
 </script>
 
 <style scoped>
-#globalHeader .title-bar {
+#globalHeader {
+  background: transparent;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 4px;
+}
+
+.logo {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+}
+
+.brand-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  font-family: 'Inter', sans-serif;
+}
+
+.header-search {
+  display: flex;
+  justify-content: center;
+}
+
+:deep(.ant-input-search) {
+  .ant-input {
+    background: #f1f5f9;
+    border: none !important;
+    border-radius: 20px;
+    padding-left: 16px;
+  }
+  .ant-input-search-button {
+    border: none !important;
+    background: transparent !important;
+    color: var(--text-secondary);
+    box-shadow: none !important;
+  }
+}
+
+.right-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+}
+
+.header-menu {
+  line-height: 64px;
+  border-bottom: none !important;
+  background: transparent;
+  min-width: 150px;
+}
+
+.user-area {
   display: flex;
   align-items: center;
 }
 
-.title {
-  color: black;
-  font-size: 18px;
-  margin-left: 16px;
+.user-avatar {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
 }
 
-.logo {
-  height: 48px;
+.user-avatar:hover {
+  border-color: var(--primary-color);
+  transform: scale(1.05);
 }
 </style>

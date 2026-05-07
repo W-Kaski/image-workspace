@@ -7,7 +7,7 @@
         <a-button
           v-if="canUploadPicture"
           type="primary"
-          :href="`/projects/image-workspace/add_picture?spaceId=${id}`"
+          :href="`/add_picture?spaceId=${id}`"
           target="_blank"
         >
           + Create Picture
@@ -18,7 +18,7 @@
           type="primary"
           ghost
           :icon="h(TeamOutlined)"
-          :href="`/projects/image-workspace/spaceUserManage/${id}`"
+          :href="`/spaceUserManage/${id}`"
           target="_blank"
         >
           Manage Members
@@ -29,7 +29,7 @@
           type="primary"
           ghost
           :icon="h(BarChartOutlined)"
-          :href="`/projects/image-workspace/space_analyze?spaceId=${id}`"
+          :href="`/space_analyze?spaceId=${id}`"
           target="_blank"
         >
           Space Analysis
@@ -76,7 +76,7 @@
     />
     <BatchEditPictureModal
       ref="batchEditPictureModalRef"
-      :spaceId="Number(id)"
+      :spaceId="id as any"
       :pictureList="dataList"
       :onSuccess="onBatchEditPictureSuccess"
     />
@@ -124,7 +124,7 @@ const canDeletePicture = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_D
 const fetchSpaceDetail = async () => {
   try {
     const res = await getSpaceVoByIdUsingGet({
-      id: Number(props.id),
+      id: props.id as any,
     })
     if (res.data.code === 0 && res.data.data) {
       space.value = res.data.data
@@ -156,7 +156,7 @@ const searchParams = ref<API.PictureQueryRequest>({
 const fetchData = async () => {
   loading.value = true
   const params = {
-    spaceId: Number(props.id),
+    spaceId: props.id as any,
     ...searchParams.value,
   }
   const res = await listPictureVoByPageUsingPost(params)
@@ -195,7 +195,7 @@ const onColorChange = async (color: string) => {
   loading.value = true
   const res = await searchPictureByColorUsingPost({
     picColor: color,
-    spaceId: Number(props.id),
+    spaceId: props.id as any,
   })
   if (res.data.code === 0 && res.data.data) {
     const data = res.data.data ?? []

@@ -2,11 +2,6 @@ server:
   port: 8123
   servlet:
     context-path: /api
-  redis:
-    database: 0
-    host: 127.0.0.1
-    port: 6379
-    timeout: 5000
 
 spring:
 
@@ -15,6 +10,24 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/ek_cloud_gallery}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+  redis:
+    database: 0
+    host: ${SPRING_REDIS_HOST:127.0.0.1}
+    port: ${SPRING_REDIS_PORT:6379}
+    timeout: 5000
+
+s3:
+  client:
+    accountId: ${R2_ACCOUNT_ID}
+    accessKey: ${R2_ACCESS_KEY_ID}
+    secretKey: ${R2_SECRET_ACCESS_KEY}
+    bucket: ${R2_BUCKET_NAME}
+    publicUrl: ${R2_PUBLIC_URL}
 
 
 
@@ -23,15 +36,12 @@ spring:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
-    # only print log in dev
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    # MyBatis configuration
   global-config:
-    enable-sql-runner: true
     db-config:
-      logic-delete-field: isDelete # 全局逻辑删除的实体字段名
-      logic-delete-value: 1 # 逻辑已删除值（默认为 1）
-      logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不写@TableLogic)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
 
 # interface documentation

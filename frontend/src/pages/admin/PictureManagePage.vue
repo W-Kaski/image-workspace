@@ -3,10 +3,10 @@
     <a-flex justify="space-between">
       <h2>Picture Management</h2>
       <a-space>
-        <a-button type="primary" href="/projects/image-workspace/add_picture" target="_blank">
+        <a-button type="primary" href="/add_picture" target="_blank">
           + Create
         </a-button>
-        <a-button type="primary" href="/projects/image-workspace/add_picture/batch" target="_blank" ghost>
+        <a-button type="primary" href="/add_picture/batch" target="_blank" ghost>
           + Batch Creation
         </a-button>
       </a-space>
@@ -58,33 +58,35 @@
         <template v-if="column.dataIndex === 'url'">
           <a-image :src="record.url" :width="120" />
         </template>
-        <template v-if="column.dataIndex === 'tags'">
-          <a-space wrap>
-            <a-tag v-for="tag in JSON.parse(record.tags || '[]')" :key="tag">
-              {{ tag }}
-            </a-tag>
-          </a-space>
-        </template>
-        <template v-if="column.dataIndex === 'picInfo'">
-          <div>Format：{{ record.picFormat }}</div>
-          <div>Width：{{ record.picWidth }}</div>
-          <div>Height：{{ record.picHeight }}</div>
-          <div>Aspect Ratio：{{ record.picScale }}</div>
-          <div>Size：{{ (record.picSize / 1024).toFixed(2) }}KB</div>
-        </template>
-        <template v-if="column.dataIndex === 'reviewMessage'">
-          <div>Review Status：{{ (PIC_REVIEW_STATUS_MAP as any)[record.reviewStatus ?? 0] }}</div>
-          <div>Review Message：{{ record.reviewMessage }}</div>
-          <div>Reviewer ID：{{ record.reviewerId }}</div>
-          <div v-if="record.reviewTime">
-            审核时间：{{ dayjs(record.reviewTime).format('YYYY-MM-DD HH:mm:ss') }}
+        <!-- 图片信息 (合并名称、分类、标签) -->
+        <template v-if="column.dataIndex === 'pictureInfo'">
+          <div style="margin-bottom: 4px;"><strong>Name: </strong>{{ record.name }}</div>
+          <div style="margin-bottom: 4px;"><strong>Category: </strong>{{ record.category || '-' }}</div>
+          <div>
+            <strong>Tags: </strong>
+            <a-space wrap>
+              <a-tag v-for="tag in JSON.parse(record.tags || '[]')" :key="tag">{{ tag }}</a-tag>
+            </a-space>
           </div>
         </template>
-        <template v-if="column.dataIndex === 'createTime'">
-          {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
+        <!-- 基础属性 -->
+        <template v-if="column.dataIndex === 'picStats'">
+          <div><strong>Fmt: </strong>{{ record.picFormat }}</div>
+          <div><strong>Size: </strong>{{ (record.picSize / 1024).toFixed(2) }}KB</div>
+          <div><strong>Dim: </strong>{{ record.picWidth }}x{{ record.picHeight }}</div>
         </template>
-        <template v-if="column.dataIndex === 'editTime'">
-          {{ dayjs(record.editTime).format('YYYY-MM-DD HH:mm:ss') }}
+        <!-- 审核信息 -->
+        <template v-if="column.dataIndex === 'reviewMessage'">
+          <div style="margin-bottom: 4px;">
+            <a-tag :color="record.reviewStatus === PIC_REVIEW_STATUS_ENUM.PASS ? 'green' : (record.reviewStatus === PIC_REVIEW_STATUS_ENUM.REJECT ? 'red' : 'orange')">
+              {{ (PIC_REVIEW_STATUS_MAP as any)[record.reviewStatus ?? 0] }}
+            </a-tag>
+          </div>
+          <div v-if="record.reviewMessage"><strong>Msg: </strong>{{ record.reviewMessage }}</div>
+          <div v-if="record.reviewerId"><strong>Reviewer: </strong>{{ record.reviewerId }}</div>
+        </template>
+        <template v-if="column.dataIndex === 'createTime'">
+          {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm') }}
         </template>
         <template v-else-if="column.key === 'action'">
           <a-space wrap>
@@ -137,53 +139,31 @@ const columns = [
   {
     title: 'Picture',
     dataIndex: 'url',
+    width: 150,
   },
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: 'Basic Info',
+    dataIndex: 'pictureInfo',
   },
   {
-    title: 'Introduction',
-    dataIndex: 'introduction',
-    ellipsis: true,
+    title: 'Properties',
+    dataIndex: 'picStats',
+    width: 150,
   },
   {
-    title: 'Category',
-    dataIndex: 'category',
-  },
-  {
-    title: 'Tags',
-    dataIndex: 'tags',
-  },
-  {
-    title: 'Picture Info',
-    dataIndex: 'picInfo',
-  },
-  {
-    title: 'User ID',
-    dataIndex: 'userId',
-    width: 80,
-  },
-  // {
-  //   title: 'Space ID',
-  //   dataIndex: 'spaceId',
-  //   width: 80,
-  // },
-  {
-    title: 'Review Message',
+    title: 'Review Status',
     dataIndex: 'reviewMessage',
+    width: 200,
   },
   {
-    title: 'Create Time',
+    title: 'Time',
     dataIndex: 'createTime',
-  },
-  {
-    title: 'Edit Time',
-    dataIndex: 'editTime',
+    width: 150,
   },
   {
     title: 'Action',
     key: 'action',
+    width: 200,
   },
 ]
 

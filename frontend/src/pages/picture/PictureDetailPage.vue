@@ -119,7 +119,7 @@ function createPermissionChecker(permission: string) {
 const fetchPictureDetail = async () => {
   try {
     const res = await getPictureVoByIdUsingGet({
-      id: Number(props.id),
+      id: props.id as any,
     })
     if (res.data.code === 0 && res.data.data) {
       picture.value = res.data.data

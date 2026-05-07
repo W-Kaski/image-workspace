@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eric.imageworkspace.exception.BusinessException;
 import com.eric.imageworkspace.exception.ErrorCode;
 import com.eric.imageworkspace.exception.ThrowUtils;
-import com.eric.imageworkspace.manage.CosManager;
+import com.eric.imageworkspace.manage.S3Manager;
 import com.eric.imageworkspace.manage.upload.FilePictureUpload;
 import com.eric.imageworkspace.manage.upload.PictureUploadTemplate;
 import com.eric.imageworkspace.manage.upload.UrlPictureUpload;
@@ -73,7 +73,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
     private UrlPictureUpload urlPictureUpload;
 
     @Autowired
-    private CosManager cosManager;
+    private S3Manager s3Manager;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -437,11 +437,11 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             return;
         }
         // 删除图片
-        cosManager.deleteObject(pictureUrl);
+        s3Manager.deleteObject(pictureUrl);
         // 删除缩略图
         String thumbnailUrl = oldPicture.getThumbnailUrl();
         if (StrUtil.isNotBlank(thumbnailUrl)) {
-            cosManager.deleteObject(thumbnailUrl);
+            s3Manager.deleteObject(thumbnailUrl);
         }
     }
 
@@ -459,13 +459,18 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             // 操作数据库
             boolean result = this.removeById(pictureId);
             ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-            // 更新空间的使用额度，释放额度
-            boolean update = spaceService.lambdaUpdate()
-                    .eq(Space::getId, oldPicture.getSpaceId())
-                    .setSql("totalSize = totalSize - " + oldPicture.getPicSize())
-                    .setSql("totalCount = totalCount - 1")
-                    .update();
-            ThrowUtils.throwIf(!update, ErrorCode.OPERATION_ERROR, "额度更新失败");
+
+            // 只有当图片属于某个空间时，才需要更新空间额度
+            Long spaceId = oldPicture.getSpaceId();
+            if (spaceId != null) {
+                // 更新空间的使用额度，释放额度
+                boolean update = spaceService.lambdaUpdate()
+                        .eq(Space::getId, spaceId)
+                        .setSql("totalSize = totalSize - " + oldPicture.getPicSize())
+                        .setSql("totalCount = totalCount - 1")
+                        .update();
+                ThrowUtils.throwIf(!update, ErrorCode.OPERATION_ERROR, "额度更新失败");
+            }
             return true;
         });
         // 异步清理文件

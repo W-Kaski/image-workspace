@@ -14,9 +14,13 @@ export const useLoginUserStore = defineStore('loginUser', () => {
    * get login user
    */
   async function fetchLoginUser() {
-    const res = await getLoginUserUsingGet()
-    if (res.data.code === 0 && res.data.data) {
-      loginUser.value = res.data.data
+    try {
+      const res = await getLoginUserUsingGet()
+      if (res.data.code === 0 && res.data.data) {
+        loginUser.value = res.data.data
+      }
+    } catch (e) {
+      console.error('Failed to fetch login user:', e)
     }
   }
 

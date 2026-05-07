@@ -94,7 +94,7 @@ const pictureForm = reactive<API.PictureEditRequest>({})
 const uploadType = ref<'file' | 'url'>('file')
 // 空间 id
 const spaceId = computed(() => {
-  return route.query?.spaceId ? Number(route.query.spaceId) : undefined
+  return route.query?.spaceId ? (route.query.spaceId as any) : undefined
 })
 
 /**
@@ -170,7 +170,7 @@ const getOldPicture = async () => {
   const id = route.query?.id
   if (id) {
     const res = await getPictureVoByIdUsingGet({
-      id: Number(id),
+      id: id as any,
     })
     if (res.data.code === 0 && res.data.data) {
       const data = res.data.data
@@ -221,7 +221,7 @@ const fetchSpace = async () => {
   // 获取数据
   if (spaceId.value) {
     const res = await getSpaceVoByIdUsingGet({
-      id: Number(spaceId.value),
+      id: spaceId.value as any,
     })
     if (res.data.code === 0 && res.data.data) {
       space.value = res.data.data

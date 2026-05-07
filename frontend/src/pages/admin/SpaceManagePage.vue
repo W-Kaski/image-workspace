@@ -1,16 +1,16 @@
 <template>
   <div id="spaceManagePage">
     <a-flex justify="space-between">
-      <h2>Space Manage</h2>
+      <h2>Space Management</h2>
       <a-space>
-        <a-button type="primary" href="/projects/image-workspace/add_space" target="_blank">
+        <a-button type="primary" href="/add_space" target="_blank">
           + Create Space
         </a-button>
-        <a-button type="primary" ghost href="/projects/image-workspace/space_analyze?queryPublic=1" target="_blank">
-          Analysis Public Gallery
+        <a-button type="primary" ghost href="/space_analyze?queryPublic=1" target="_blank">
+          Analyze Public Images
         </a-button>
-        <a-button type="primary" ghost href="/projects/image-workspace/space_analyze?queryAll=1" target="_blank">
-          Analysis All Spaces
+        <a-button type="primary" ghost href="/space_analyze?queryAll=1" target="_blank">
+          Analyze All Spaces
         </a-button>
       </a-space>
 

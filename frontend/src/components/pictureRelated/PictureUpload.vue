@@ -62,16 +62,20 @@ const loading = ref<boolean>(false)
  */
 const beforeUpload = (file: any) => {
   // 校验图片格式
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
-  if (!isJpgOrPng) {
-    message.error('Only jpg or png format is supported.')
+  const isAllowedFormat =
+    file.type === 'image/jpeg' ||
+    file.type === 'image/png' ||
+    file.type === 'image/webp' ||
+    file.type === 'image/gif'
+  if (!isAllowedFormat) {
+    message.error('Only jpg, png, webp, or gif format is supported.')
   }
-  // 校验图片大小
-  const isLt2M = file.size / 1024 / 1024 < 3
-  if (!isLt2M) {
-    message.error('Picture size must be less than 3MB.')
+  // 校验图片大小 (改为 10MB)
+  const isLt10M = file.size / 1024 / 1024 < 10
+  if (!isLt10M) {
+    message.error('Picture size must be less than 10MB.')
   }
-  return isJpgOrPng && isLt2M
+  return isAllowedFormat && isLt10M
 }
 </script>
 

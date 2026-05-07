@@ -1,4 +1,4 @@
-CREATE DATABASE ek_cloud_gallery;
+CREATE DATABASE IF NOT EXISTS ek_cloud_gallery;
 
 use ek_cloud_gallery;
 

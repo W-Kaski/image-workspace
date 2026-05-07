@@ -22,15 +22,15 @@ public class FilePictureUpload extends PictureUploadTemplate {
         // 1. Validate file size
         long fileSize = multipartFile.getSize();
         final long ONE_M = 1024 * 1024;
-        // Throw error if file size exceeds 3MB
-        ThrowUtils.throwIf(fileSize > 3 * ONE_M, ErrorCode.PARAMS_ERROR, "File size cannot exceed 3MB");
+        // Throw error if file size exceeds 10MB
+        ThrowUtils.throwIf(fileSize > 10 * ONE_M, ErrorCode.PARAMS_ERROR, "File size cannot exceed 10MB");
 
         // 2. Validate file extension
         String fileSuffix = FileUtil.getSuffix(multipartFile.getOriginalFilename());
         // Allowed file extensions
-        final List<String> ALLOW_FORMAT_LIST = Arrays.asList("jpeg", "png", "jpg", "webp");
+        final List<String> ALLOW_FORMAT_LIST = Arrays.asList("jpeg", "png", "jpg", "webp", "gif");
         // Throw error if file type is not allowed
-        ThrowUtils.throwIf(!ALLOW_FORMAT_LIST.contains(fileSuffix), ErrorCode.PARAMS_ERROR, "Invalid file type");
+        ThrowUtils.throwIf(!ALLOW_FORMAT_LIST.contains(fileSuffix.toLowerCase()), ErrorCode.PARAMS_ERROR, "Invalid file type");
     }
 
     @Override

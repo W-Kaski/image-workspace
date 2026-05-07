@@ -95,7 +95,7 @@ const dataList = ref<API.SpaceUserVO[]>([])
 // Fetch data
 const fetchData = async () => {
   const res = await listSpaceUserUsingPost({
-    spaceId: Number(props.id),
+    spaceId: props.id as any,
   })
   if (res.data.code === 0 && res.data.data) {
     dataList.value = res.data.data ?? []
@@ -114,7 +114,7 @@ const formData = reactive<API.SpaceUserAddRequest>({})
 // Add member
 const handleSubmit = async () => {
   const res = await addSpaceUserUsingPost({
-    spaceId: Number(props.id),
+    spaceId: props.id as any,
     ...formData,
   })
   if (res.data.code === 0) {

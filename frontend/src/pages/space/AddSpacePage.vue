@@ -120,7 +120,7 @@ const handleSubmit = async (values: any) => {
 const getOldSpace = async () => {
   const id = route.query?.id
   if (id) {
-    const res = await getSpaceVoByIdUsingGet({ id: Number(id) })
+    const res = await getSpaceVoByIdUsingGet({ id: id as any })
     if (res.data.code === 0 && res.data.data) {
       const data = res.data.data
       space.value = data

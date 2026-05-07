@@ -82,11 +82,11 @@
         </dependency>
 
 
-        <!-- 对象存储 -->
+        <!-- S3 Compatible Storage (Cloudflare R2) -->
         <dependency>
-            <groupId>com.qcloud</groupId>
-            <artifactId>cos_api</artifactId>
-            <version>5.6.227</version>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.700</version>
         </dependency>
 
         <!-- HTML 解析：https://jsoup.org/ -->

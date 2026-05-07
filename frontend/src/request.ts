@@ -2,29 +2,15 @@ import axios from 'axios'
 
 
 // separate development and production environment
-// const DEV_BASE_URL = "http://localhost:8123";
+const DEV_BASE_URL = "";
 const PROD_BASE_URL = "https://api.anio.me/image/api"
 
 const myAxios = axios.create({
-  baseURL: PROD_BASE_URL,
+  baseURL: import.meta.env.DEV ? DEV_BASE_URL : PROD_BASE_URL,
   timeout: 10000,
   withCredentials: true,
 });
 import {message} from "ant-design-vue";
-
-
-
-// request interceptor
-myAxios.interceptors.request.use(
-  function (config) {
-    // Do something before request is sent
-    return config
-  },
-  function (error) {
-    // Do something with request error
-    return Promise.reject(error)
-  },
-)
 
 // response interceptor
 myAxios.interceptors.response.use(
@@ -43,8 +29,11 @@ myAxios.interceptors.response.use(
     return response
   },
   function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
+    // Handle specific network errors
+    console.error("Request Error:", error);
+    if (error.message === 'Network Error') {
+      message.error('Backend connection failed. Please check if Docker backend is running on 18123.');
+    }
     return Promise.reject(error)
   },
 )

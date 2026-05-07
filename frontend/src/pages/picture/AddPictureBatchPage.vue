@@ -2,34 +2,44 @@
   <!-- @author 程序员鱼皮 <a href="https://www.codefather.cn">编程导航原创项目</a> -->
   <div id="addPictureBatchPage">
     <h2 style="margin-bottom: 16px">Batch Creation</h2>
-    <!-- 图片信息表单 -->
-    <a-form name="formData" layout="vertical" :model="formData" @finish="handleSubmit">
-      <a-form-item name="searchText" label="Keyword">
-        <a-input v-model:value="formData.searchText" placeholder="Please input keyword" allow-clear />
-      </a-form-item>
-      <a-form-item name="count" label="Number of pictures">
-        <a-input-number
-          v-model:value="formData.count"
-          placeholder="Please input number of pictures"
-          style="min-width: 180px"
-          :min="1"
-          :max="30"
-          allow-clear
-        />
-      </a-form-item>
-      <a-form-item name="namePrefix" label="Picture prefix">
-        <a-input
-          v-model:value="formData.namePrefix"
-          placeholder="Please input picture prefix, will be supplemented with serial number"
-          allow-clear
-        />
-      </a-form-item>
-      <a-form-item>
-        <a-button type="primary" html-type="submit" style="width: 100%" :loading="loading">
-          Perform Crawling
-        </a-button>
-      </a-form-item>
-    </a-form>
+
+    <a-tabs v-model:activeKey="activeTab">
+      <a-tab-pane key="url" tab="URL Crawling">
+        <!-- URL 批量导入表单 -->
+        <a-form name="formData" layout="vertical" :model="formData" @finish="handleSubmit">
+          <a-form-item name="searchText" label="Keyword">
+            <a-input v-model:value="formData.searchText" placeholder="Please input keyword" allow-clear />
+          </a-form-item>
+          <a-form-item name="count" label="Number of pictures">
+            <a-input-number
+              v-model:value="formData.count"
+              placeholder="Please input number of pictures"
+              style="min-width: 180px"
+              :min="1"
+              :max="30"
+              allow-clear
+            />
+          </a-form-item>
+          <a-form-item name="namePrefix" label="Picture prefix">
+            <a-input
+              v-model:value="formData.namePrefix"
+              placeholder="Please input picture prefix"
+              allow-clear
+            />
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" html-type="submit" style="width: 100%" :loading="loading">
+              Perform Crawling
+            </a-button>
+          </a-form-item>
+        </a-form>
+      </a-tab-pane>
+
+      <a-tab-pane key="local" tab="Local Upload">
+        <!-- 本地批量上传组件 -->
+        <PictureUploadMulti :onSuccess="onLocalUploadSuccess" />
+      </a-tab-pane>
+    </a-tabs>
   </div>
 </template>
 
@@ -43,6 +53,9 @@ import {
 } from '@/api/pictureController.ts'
 import { useRoute, useRouter } from 'vue-router'
 
+import PictureUploadMulti from '@/components/pictureRelated/PictureUploadMulti.vue'
+
+const activeTab = ref('url')
 const formData = reactive<API.PictureUploadByBatchRequest>({
   count: 10,
 })
@@ -50,6 +63,11 @@ const formData = reactive<API.PictureUploadByBatchRequest>({
 const loading = ref(false)
 
 const router = useRouter()
+
+const onLocalUploadSuccess = () => {
+  message.success('All pictures uploaded successfully')
+  router.push('/')
+}
 
 /**
  * 提交表单

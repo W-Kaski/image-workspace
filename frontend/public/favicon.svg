@@ -1,0 +1,22 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d2ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3a7bd5;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+      <feOffset dx="2" dy="4" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <path d="M96 56.5C96 41.3 83.7 29 68.5 29C57.4 29 47.9 35.6 43.6 45.1C41.2 43.8 38.4 43 35.5 43C26.4 43 19 50.4 19 59.5C19 60.4 19.1 61.3 19.2 62.1C11.6 64.9 6 72.3 6 81C6 92.6 15.4 102 27 102H95C108.8 102 120 90.8 120 77C120 65.7 109.8 56.5 96 56.5Z" 
+        fill="url(#cloudGradient)" 
+        filter="url(#shadow)" />
+</svg>

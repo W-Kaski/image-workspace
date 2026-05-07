@@ -15,7 +15,7 @@ import SpaceAnalyzePage from '@/pages/space/SpaceAnalyzePage.vue'
 import SpaceUserManagePage from '@/pages/admin/SpaceUserManagePage.vue'
 
 const router = createRouter({
-  history: createWebHistory('/projects/image-workspace/'),
+  history: createWebHistory('/'),
   routes: [
     {
       path: '/',

@@ -29,7 +29,7 @@
     "vue3-colorpicker": "^2.3.0"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.0",
+    "@tsconfig/node20": "^20.1.4",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^22.9.3",
     "@umijs/openapi": "^1.14.1",

@@ -369,6 +369,10 @@ declare namespace API {
     url?: string
     user?: UserVO
     userId?: number
+    reviewStatus?: number
+    reviewMessage?: string
+    reviewerId?: number
+    reviewTime?: string
   }
 
   type SearchPictureByColorRequest = {

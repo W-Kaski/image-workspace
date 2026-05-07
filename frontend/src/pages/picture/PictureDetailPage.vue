@@ -1,5 +1,12 @@
 <template>
   <div id="pictureDetailPage">
+    <a-alert
+      v-if="picture.reviewStatus !== 1"
+      :message="picture.reviewStatus === 0 ? 'Reviewing: This picture is currently under review and is only visible to you.' : 'Rejected: ' + picture.reviewMessage"
+      :type="picture.reviewStatus === 0 ? 'info' : 'error'"
+      show-icon
+      style="margin-bottom: 16px"
+    />
     <a-row :gutter="[16, 16]">
       <!-- 图片预览 -->
       <a-col :sm="24" :md="16" :xl="18">

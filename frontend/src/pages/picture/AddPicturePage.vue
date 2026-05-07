@@ -123,7 +123,11 @@ const handleSubmit = async (values: any) => {
   })
   // 操作成功
   if (res.data.code === 0 && res.data.data) {
-    message.success('Create Success')
+    if (picture.value?.reviewStatus === 0) {
+       message.success('Success! Your picture has been submitted and is pending review.')
+    } else {
+       message.success('Create Success')
+    }
     // 跳转到图片详情页
     router.push({
       path: `/picture/${pictureId}`,

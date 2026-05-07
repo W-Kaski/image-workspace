@@ -34,7 +34,7 @@ const checkUserSpace = async () => {
 
   if (res.data.code === 0) {
     // If there is a space, enter the first one
-    if (res.data.data?.records?.length > 0) {
+    if (res.data.data && res.data.data.records && res.data.data.records.length > 0) {
       const space = res.data.data.records[0]
       router.replace(`/space/${space.id}`)
     } else {

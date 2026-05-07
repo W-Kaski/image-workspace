@@ -2,7 +2,7 @@
   <div id="spaceDetailPage">
     <!-- Space Info -->
     <a-flex justify="space-between">
-      <h2>{{ space.spaceName }} ({{ SPACE_TYPE_MAP[space.spaceType] }})</h2>
+      <h2>{{ space.spaceName }} ({{ SPACE_TYPE_MAP[space.spaceType ?? 0] }})</h2>
       <a-space size="middle">
         <a-button
           v-if="canUploadPicture"
@@ -44,7 +44,7 @@
           <a-progress
             type="circle"
             :size="42"
-            :percent="((space.totalSize * 100) / space.maxSize).toFixed(1)"
+            :percent="(((space.totalSize || 0) * 100) / (space.maxSize || 1)).toFixed(1)"
           />
         </a-tooltip>
       </a-space>
@@ -76,7 +76,7 @@
     />
     <BatchEditPictureModal
       ref="batchEditPictureModalRef"
-      :spaceId="id"
+      :spaceId="Number(id)"
       :pictureList="dataList"
       :onSuccess="onBatchEditPictureSuccess"
     />
@@ -124,7 +124,7 @@ const canDeletePicture = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_D
 const fetchSpaceDetail = async () => {
   try {
     const res = await getSpaceVoByIdUsingGet({
-      id: props.id,
+      id: Number(props.id),
     })
     if (res.data.code === 0 && res.data.data) {
       space.value = res.data.data
@@ -156,7 +156,7 @@ const searchParams = ref<API.PictureQueryRequest>({
 const fetchData = async () => {
   loading.value = true
   const params = {
-    spaceId: props.id,
+    spaceId: Number(props.id),
     ...searchParams.value,
   }
   const res = await listPictureVoByPageUsingPost(params)
@@ -195,7 +195,7 @@ const onColorChange = async (color: string) => {
   loading.value = true
   const res = await searchPictureByColorUsingPost({
     picColor: color,
-    spaceId: props.id,
+    spaceId: Number(props.id),
   })
   if (res.data.code === 0 && res.data.data) {
     const data = res.data.data ?? []

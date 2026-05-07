@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // separate development and production environment
 // const DEV_BASE_URL = "http://localhost:8123";
-const PROD_BASE_URL = "https://api.ek-flowity.site"
+const PROD_BASE_URL = "https://api.anio.me/image/api"
 
 const myAxios = axios.create({
   baseURL: PROD_BASE_URL,

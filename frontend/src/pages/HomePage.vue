@@ -26,11 +26,6 @@
     <!-- Picture list -->
     <div class="content-container">
       <PictureList :dataList="dataList" :loading="loading" />
-
-      <!-- Empty State -->
-      <div v-if="!loading && dataList.length === 0" class="empty-placeholder">
-        <a-empty description="No inspiration found yet." />
-      </div>
     </div>
 
     <!-- Pagination -->
@@ -40,7 +35,7 @@
         v-model:current="searchParams.current"
         v-model:pageSize="searchParams.pageSize"
         :total="total"
-        :show-total="(t) => `${t} items`"
+        :show-total="(t: number) => `${t} items`"
         @change="onPageChange"
       />
     </div>
@@ -143,6 +138,8 @@ const getTagCategoryOptions = async () => {
     if (res.data.code === 0 && res.data.data) {
       tagList.value = res.data.data.tagList ?? []
       categoryList.value = res.data.data.categoryList ?? []
+      // Initialize tag selection state
+      selectedTagList.value = new Array(tagList.value.length).fill(false)
     }
   } catch (e) {
     console.error('Failed to load filters', e)
@@ -218,7 +215,7 @@ onMounted(() => {
     color: var(--text-primary);
   }
 
-  &-checked {
+  &.ant-tag-checkable-checked {
     background: var(--text-primary) !important;
     border-color: var(--text-primary) !important;
     color: white !important;

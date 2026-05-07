@@ -52,7 +52,7 @@ const handleUpload = async () => {
     }
   } catch (error) {
     console.error('图片上传失败', error)
-    message.error('图片上传失败，' + error.message)
+    message.error('图片上传失败，' + (error as any).message)
   }
   loading.value = false
 }

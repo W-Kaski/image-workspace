@@ -98,7 +98,7 @@ router.afterEach((to, from, next) => {
 })
 
 // Menu click navigation
-const doMenuClick = ({ key }) => {
+const doMenuClick = ({ key }: { key: string }) => {
   router.push(key)
 }
 </script>

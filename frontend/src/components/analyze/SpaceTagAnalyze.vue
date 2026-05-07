@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 // 图表数据
-const dataList = ref<API.SpaceCategoryAnalyzeResponse>([])
+const dataList = ref<API.SpaceTagAnalyzeResponse[]>([])
 // 加载状态
 const loading = ref(true)
 
@@ -56,7 +56,7 @@ watchEffect(() => {
 
 // 图表选项
 const options =computed(() => {
-  const tagData = dataList.value.map((item) => ({
+  const tagData = dataList.value.map((item: any) => ({
     name: item.tag,
     value: item.count,
   }))

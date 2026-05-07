@@ -55,7 +55,7 @@
 <script lang="ts" setup>
 import { computed, h, ref } from 'vue'
 import { HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons-vue'
-import { MenuProps, message } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { userLogoutUsingPost } from '@/api/userController.ts'
@@ -98,7 +98,7 @@ const originItems = [
   },
 ]
 // filter menus
-const filterMenus = (menus = [] as MenuProps['items']) => {
+const filterMenus = (menus = [] as any[]) => {
   return menus?.filter((menu) => {
     // on admin menu, check user role
     if (menu?.key?.startsWith('/admin')) {
@@ -117,7 +117,7 @@ const items = computed(() => filterMenus(originItems))
 const router = useRouter()
 
 // 路由跳转事件
-const doMenuClick = ({ key }) => {
+const doMenuClick = ({ key }: { key: string }) => {
   router.push({
     path: key,
   })

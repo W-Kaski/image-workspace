@@ -48,13 +48,13 @@ const timeDimensionOptions = [
   },
 ]
 // 用户选项
-const userId = ref<string>()
+const userId = ref<number>()
 const doSearch = (value: string) => {
-  userId.value = value
+  userId.value = Number(value)
 }
 
 // 图表数据
-const dataList = ref<API.SpaceCategoryAnalyzeResponse>([])
+const dataList = ref<API.SpaceUserAnalyzeResponse[]>([])
 // 加载状态
 const loading = ref(true)
 
@@ -86,8 +86,8 @@ watchEffect(() => {
 
 // 图表选项
 const options = computed(() => {
-  const periods = dataList.value.map((item) => item.period) // 时间区间
-  const counts = dataList.value.map((item) => item.count) // 上传数量
+  const periods = dataList.value.map((item: any) => item.period) // 时间区间
+  const counts = dataList.value.map((item: any) => item.count) // 上传数量
 
   return {
     tooltip: { trigger: 'axis' },

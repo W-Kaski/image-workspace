@@ -36,7 +36,7 @@
           <a-select
             v-model:value="record.spaceRole"
             :options="SPACE_ROLE_OPTIONS"
-            @change="(value) => editSpaceRole(value, record)"
+            @change="(value: string) => editSpaceRole(value, record)"
           />
         </template>
         <template v-else-if="column.dataIndex === 'createTime'">
@@ -94,10 +94,9 @@ const dataList = ref<API.SpaceUserVO[]>([])
 
 // Fetch data
 const fetchData = async () => {
-  const spaceId = props.id
-  if (!spaceId) return
-
-  const res = await listSpaceUserUsingPost({ spaceId })
+  const res = await listSpaceUserUsingPost({
+    spaceId: Number(props.id),
+  })
   if (res.data.code === 0 && res.data.data) {
     dataList.value = res.data.data ?? []
   } else {
@@ -114,11 +113,8 @@ const formData = reactive<API.SpaceUserAddRequest>({})
 
 // Add member
 const handleSubmit = async () => {
-  const spaceId = props.id
-  if (!spaceId) return
-
   const res = await addSpaceUserUsingPost({
-    spaceId,
+    spaceId: Number(props.id),
     ...formData,
   })
   if (res.data.code === 0) {
@@ -130,7 +126,7 @@ const handleSubmit = async () => {
 }
 
 // Edit member role
-const editSpaceRole = async (value, record) => {
+const editSpaceRole = async (value: string, record: API.SpaceUserVO) => {
   const res = await editSpaceUserUsingPost({
     id: record.id,
     spaceRole: value,
@@ -143,7 +139,7 @@ const editSpaceRole = async (value, record) => {
 }
 
 // Delete member
-const doDelete = async (id: string) => {
+const doDelete = async (id: number) => {
   if (!id) return
 
   const res = await deleteSpaceUserUsingPost({ id })

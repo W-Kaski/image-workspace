@@ -51,7 +51,7 @@ import { SPACE_LEVEL_OPTIONS, SPACE_TYPE_ENUM, SPACE_TYPE_MAP } from '@/constant
 import { formatSize } from '@/utils'
 
 const space = ref<API.SpaceVO>()
-const spaceForm = reactive<API.SpaceAddRequest | API.SpaceEditRequest>({})
+const spaceForm = reactive<API.SpaceAddRequest & API.SpaceUpdateRequest>({} as any)
 const loading = ref(false)
 
 const route = useRoute()

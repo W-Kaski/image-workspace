@@ -34,10 +34,7 @@ const fetchData = async () => {
   loading.value = true
   // 转换搜索参数
   const res = await getSpaceRankAnalyzeUsingPost({
-    queryAll: props.queryAll,
-    queryPublic: props.queryPublic,
-    spaceId: props.spaceId,
-    topN: 10, // 后端默认是 10
+    topN: 10,
   })
   if (res.data.code === 0 && res.data.data) {
     dataList.value = res.data.data ?? []
@@ -56,8 +53,8 @@ watchEffect(() => {
 
 // 图表选项
 const options = computed(() => {
-  const spaceNames = dataList.value.map((item) => item.spaceName)
-  const usageData = dataList.value.map((item) => (item.totalSize / (1024 * 1024)).toFixed(2)) // 转为 MB
+  const spaceNames = dataList.value.map((item: any) => item.spaceName)
+  const usageData = dataList.value.map((item: any) => (item.totalSize / (1024 * 1024)).toFixed(2)) // 转为 MB
 
   return {
     tooltip: { trigger: 'axis' },

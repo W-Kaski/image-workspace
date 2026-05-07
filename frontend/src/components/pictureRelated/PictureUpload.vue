@@ -4,7 +4,7 @@
       list-type="picture-card"
       :show-upload-list="false"
       :custom-request="handleUpload"
-      :before-upload="beforeUpload"
+      :before-upload="beforeUpload as any"
     >
       <img v-if="picture?.url" :src="picture?.url" alt="avatar" />
       <div v-else>
@@ -39,7 +39,7 @@ const handleUpload = async ({ file }: any) => {
   try {
     const params: API.PictureUploadRequest = props.picture ? { id: props.picture.id } : {}
     params.spaceId = props.spaceId;
-    const res = await uploadPictureUsingPost(params, {}, file)
+    const res: any = await uploadPictureUsingPost(params, {}, file)
     if (res.data.code === 0 && res.data.data) {
       message.success('Picture upload successfully.')
       // 将上传成功的图片信息传递给父组件
@@ -49,7 +49,7 @@ const handleUpload = async ({ file }: any) => {
     }
   } catch (error) {
     console.error('Picture upload failed', error)
-    message.error('Picture upload failed, ' + error.message)
+    message.error('Picture upload failed, ' + (error as any).message)
   }
   loading.value = false
 }
@@ -60,7 +60,7 @@ const loading = ref<boolean>(false)
  * Validate picture before upload
  * @param file
  */
-const beforeUpload = (file: UploadProps['fileList'][number]) => {
+const beforeUpload = (file: any) => {
   // 校验图片格式
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
   if (!isJpgOrPng) {

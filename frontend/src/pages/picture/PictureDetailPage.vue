@@ -81,7 +81,7 @@
         </a-card>
       </a-col>
     </a-row>
-    <ShareModel ref="shareModalRef" :link="shareLink" />
+    <ShareModel ref="shareModalRef" :link="shareLink" title="Share Picture" />
   </div>
 </template>
 
@@ -119,7 +119,7 @@ function createPermissionChecker(permission: string) {
 const fetchPictureDetail = async () => {
   try {
     const res = await getPictureVoByIdUsingGet({
-      id: props.id,
+      id: Number(props.id),
     })
     if (res.data.code === 0 && res.data.data) {
       picture.value = res.data.data
@@ -170,7 +170,7 @@ const doDownload = () => {
 // ----- 分享操作 ----
 const shareModalRef = ref()
 // 分享链接
-const shareLink = ref<string>()
+const shareLink = ref<string>('')
 // 分享
 const doShare = () => {
   shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.value.id}`

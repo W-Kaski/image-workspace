@@ -80,7 +80,7 @@ const isTeamSpace = computed(() => {
 const cropperRef = ref()
 
 // Change image scale (zoom)
-const changeScale = (num) => {
+const changeScale = (num: number) => {
   cropperRef.value?.changeScale(num)
   if (num > 0) {
     editAction(PICTURE_EDIT_ACTION_ENUM.ZOOM_IN)
@@ -121,7 +121,7 @@ const handleUpload = async ({ file }: any) => {
   try {
     const params: API.PictureUploadRequest = props.picture ? { id: props.picture.id } : {}
     params.spaceId = props.spaceId
-    const res = await uploadPictureUsingPost(params, {}, file)
+    const res: any = await uploadPictureUsingPost(params, {}, file)
     if (res.data.code === 0 && res.data.data) {
       message.success('Image uploaded successfully')
       props.onSuccess?.(res.data.data)
@@ -131,7 +131,7 @@ const handleUpload = async ({ file }: any) => {
     }
   } catch (error) {
     console.error('Image upload failed', error)
-    message.error('Image upload failed: ' + error.message)
+    message.error('Image upload failed: ' + (error as any).message)
   }
   loading.value = false
 }

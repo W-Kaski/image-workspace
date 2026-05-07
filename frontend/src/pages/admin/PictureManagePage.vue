@@ -73,7 +73,7 @@
           <div>Size：{{ (record.picSize / 1024).toFixed(2) }}KB</div>
         </template>
         <template v-if="column.dataIndex === 'reviewMessage'">
-          <div>Review Status：{{ PIC_REVIEW_STATUS_MAP[record.reviewStatus] }}</div>
+          <div>Review Status：{{ (PIC_REVIEW_STATUS_MAP as any)[record.reviewStatus ?? 0] }}</div>
           <div>Review Message：{{ record.reviewMessage }}</div>
           <div>Reviewer ID：{{ record.reviewerId }}</div>
           <div v-if="record.reviewTime">
@@ -225,7 +225,7 @@ const pagination = computed(() => {
     pageSize: searchParams.pageSize,
     total: total.value,
     showSizeChanger: true,
-    showTotal: (total) => `${total} in total`,
+    showTotal: (total: number) => `${total} in total`,
   }
 })
 
@@ -244,7 +244,7 @@ const doSearch = () => {
 }
 
 // 删除数据
-const doDelete = async (id: string) => {
+const doDelete = async (id: number) => {
   if (!id) {
     return
   }

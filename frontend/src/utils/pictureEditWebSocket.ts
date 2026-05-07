@@ -15,8 +15,8 @@ export default class PictureEditWebSocket {
   connect() {
     // const DEV_BASE_URL = "ws://localhost:8123";
     // 线上地址
-    const PROD_BASE_URL = "wss://api.ek-flowity.site"
-    const url = `${PROD_BASE_URL}/api/ws/picture/edit?pictureId=${this.pictureId}`
+    const PROD_BASE_URL = 'wss://api.anio.me/image'
+    const url = `${PROD_BASE_URL}/ws/picture/edit?pictureId=${this.pictureId}`
     this.socket = new WebSocket(url)
 
     // 设置携带 cookie

@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // separate development and production environment
 const DEV_BASE_URL = "";
-const PROD_BASE_URL = "https://api.anio.me/image/api"
+const PROD_BASE_URL = "https://api.anio.me/image"
 
 const myAxios = axios.create({
   baseURL: import.meta.env.DEV ? DEV_BASE_URL : PROD_BASE_URL,

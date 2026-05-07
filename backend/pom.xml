@@ -109,12 +109,6 @@
             <version>3.1.8</version>
         </dependency>
 
-        <!-- Sa-Token 权限认证 -->
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot-starter</artifactId>
-            <version>1.39.0</version>
-        </dependency>
         <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
         <dependency>
             <groupId>cn.dev33</groupId>
@@ -178,7 +172,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.eric.ekcloudgallerybackend.EkCloudGalleryBackendApplication</mainClass>
+                    <mainClass>com.eric.imageworkspace.ImageWorkspaceApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
